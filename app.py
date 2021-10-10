@@ -35,21 +35,24 @@ def bot():
     # handling session 
 
     if session['Login']:
+        if '?' in incoming_msg:
+            if session['Loaded']:
+                msg.body('your data sucessfully loaded. \nReply with following to get imformation\n*1.* *General*- general information \n*2* *User*- user info \n*3.* *Balance*- balance Inquiry \n*4.* *Logout*- to end your session.')
+                responded = True  
+            else:
+                msg.body('still Loading!. Please wait for few seconds')
+                responded = True 
+
         if not session['Loaded']:
             if 'start' in incoming_msg:
                 go()
                 msg.body("*Loading data*\nthis may take some time. Please reply with *?* to know status of your information")
                 responded = True
     
-            elif '?' in incoming_msg:
-                if session['Loaded']:
-                    msg.body('your data sucessfully loaded. \nReply with following to get imformation\n*1.* *General*- general information \n*2* *User*- user info \n*3.* *Balance*- balance Inquiry \n*4.* *Logout*- to end your session.')
-                    responded = True  
-                else:
-                    msg.body('still Loading!. Please wait for few seconds')
-                    responded = True 
+
             elif 'logout' in incoming_msg:
                 session['Login'] = False
+                session['Loaded'] = False
                 with open("data.json", "w") as database:
                     json.dump({}, database) 
                 msg.body('session ended sucessfully! \n*Thank you*')
@@ -65,7 +68,9 @@ def bot():
                 with open("data.json", "r") as database:
                     json_object = json.load(database)
                     val = json_object["1"]
-                msg.body(val)
+                msg_str1 = '*Name:* '+val['Name']+'\n'+'*'+val['Account Status']+'*'+'\n'+'*VC_NO.*- '+val['VC_NO.']+'\n'+'*Model*- '+val['Model']+'\n'
+                    
+                msg.body(msg_str1)
                 responded = True
 
             elif 'balance' in incoming_msg:
@@ -73,7 +78,10 @@ def bot():
                 with open("data.json", "r") as database:
                     json_object = json.load(database)
                     val = json_object["2"]
-                msg.body(val)
+
+                msg_str2 = '*Acount balance till now:-* '+val['Balance_Today'] +'\n'+'*Last Recharge Amount*- ' +val['Last Recharge Amount']+'\n'+ '*Last Recharge Date*- '+val['Last Recharge Date']+'\n'+'*Next Recharge Date*- '+val['Next Recharge Date']+'\n' +'*Full Month Recharge*- '+ val['Full Month Recharge'] + '\n'
+                  
+                msg.body(msg_str2)
                 responded = True
 
             elif 'user' in incoming_msg:
@@ -81,11 +89,15 @@ def bot():
                 with open("data.json", "r") as database:
                     json_object = json.load(database)
                     val = json_object["3"]
-                msg.body(val)
+
+                msg_str3 = "*Name*- "+ val['Name'] + '\n' + '*Registered Telephone Number*- '+ val['Registered Telephone Number'] + '\n' + '*Registered Email ID*- ' + val['Registered Email ID'] + '\n' + '*Address*- ' + val['Address'] + '\n'
+
+                msg.body(msg_str3)
                 responded = True
-                
+
             elif 'logout' in incoming_msg:
                 session['Login'] = False
+                session['Loaded'] = False
                 with open("data.json", "w") as database:
                     json.dump({}, database) 
                 msg.body('session ended sucessfully! \n*Thank you*')

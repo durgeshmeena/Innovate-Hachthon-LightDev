@@ -34,7 +34,7 @@ def get_user(username, password):
     # status = driver.find_element_by_tag_name('option').get_attribute("status")
 
     general_details["Name"] = name
-    general_details["Acount Status"] = status
+    general_details["Account Status"] = status
     general_details["VC_NO."] = VC_no
     general_details["Model"] = model
 
@@ -43,13 +43,11 @@ def get_user(username, password):
     balance_data = [hdval.text for hdval in  driver.find_elements_by_class_name('headtext')]
     balance_value = [ balval.text for balval in  driver.find_elements_by_tag_name('span')]
 
-    i=13
-    for bal in balance_data:
-        balance[bal] = balance_value[i]
-        i += 1
-
-
-    balance[ driver.find_element_by_class_name("frmtext").text ] = driver.find_element_by_tag_name("b").text
+    balance['Balance_Today'] = balance_value[13]
+    balance['Last Recharge Amount'] = balance_value[14]
+    balance['Last Recharge Date'] = balance_value[15]
+    balance['Next Recharge Date'] = balance_value[16]
+    balance['Full Month Recharge'] = driver.find_element_by_tag_name("b").text
 
     offer = driver.find_element_by_xpath("//div[@class='contaslider']/img").get_attribute("src")
 

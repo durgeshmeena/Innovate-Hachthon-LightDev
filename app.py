@@ -12,7 +12,7 @@ app.secret_key = config('APP_SECRET')
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    return "Server Started"
 
 def write(data):
     session['Loaded'] = True
